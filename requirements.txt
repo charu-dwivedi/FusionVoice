@@ -1,0 +1,8 @@
+gTTS==1.1.6
+gTTS-token==1.1.1
+nltk==3.2.1
+numpy==1.11.1
+PyAudio==0.2.9
+pygame==1.9.2b6
+requests==2.11.0
+SpeechRecognition==3.4.6

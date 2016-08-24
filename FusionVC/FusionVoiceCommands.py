@@ -5,7 +5,7 @@ import adsk.core, adsk.fusion, adsk.cam, traceback
 
 
 
-def run(context):
+def run():
     ui = None
     try:
         app = adsk.core.Application.get()
