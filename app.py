@@ -6,16 +6,25 @@ from .FusionVC import CommandSelect as cs
 import adsk.core, adsk.fusion, adsk.cam, traceback
 
 def run(context):
-    '''
+    
     print("Imports work")
     app = adsk.core.Application.get()
     ui  = app.userInterface 
-    qatToolbar = ui.toolbars.itemById('NavToolbar')
+    nav = ui.toolbars.itemById('NavToolbar')
 
     buttonExample = cmdDefs.addButtonDefinition('VoiceAssistant', 'Sample Button', 'Sample button tooltip', \
-                                                 './/Resources//Sample')
-    '''
+                                                 './/Resources//')
 
+    buttonExampleCreated = ButtonExampleCreatedEventHandler()
+    buttonExample.commandCreated.add(buttonExampleCreated)
+    handlers.append(buttonExampleCreated)
+
+
+    buttonControl = addInsPanel.controls.addCommand(buttonExample)
+
+    # Make the button available in the panel.
+    buttonControl.isPromotedByDefault = True
+    buttonControl.isPromoted = True
 
     try:
         command = speech.speechrec() #'draw a circle with a radius of 16 inches'
@@ -26,3 +35,15 @@ def run(context):
         print('The machine does not seem to recognize some of the words in the command, try again.')
         print(e)
         
+
+
+def stop(context):
+    ui = None
+    try:
+        app = adsk.core.Application.get()
+        ui  = app.userInterface
+        ui.messageBox('Stop addin')
+
+    except:
+        if ui:
+            ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))

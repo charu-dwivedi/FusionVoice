@@ -1,0 +1,13 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"addin",
+	"id":	"70950fc7-79b0-4541-a8c3-a4ddbc53d91b",
+	"author":	"Charu Dwivedi",
+	"description":	{
+		"":	"Voice Commands for Fusion 360"
+	},
+	"version":	"0.5",
+	"runOnStartup":	false,
+	"supportedOS":	"mac",
+	"editEnabled":	true
+}
