@@ -21,7 +21,7 @@ def extrude_object(designRootComp, lastsketch):
     distance = adsk.core.ValueInput.createByReal(5)
     extInput.setDistanceExtent(False, distance)
     ext = extrudes.add(extInput)
-
+'''
 
 COMMAND_VERBS = {"saw":{}, "ate":{}, "walked":{}, "draw":{"circle":{"diameter":{}, "radius":draw_circle}}, "square":{"side":{}}, \
     "design":{"gear":{}, "spring":{}}, "extrude":{"circle":{}, "square":{}, "(none)":{} }, "open":{ "sketch":{"(none)":{}} }} 
@@ -58,6 +58,7 @@ def run_command(command_arr):
     except:
         if ui:
             ui.messageBox('Failed:\n{}'.format(traceback.format_exc()))
+'''
 '''
 def run():
     try:

@@ -22,7 +22,7 @@ grammar1 = nltk.CFG.fromstring("""
   VP -> V | V NP | V NP PP | V PP NP
   PP -> P NP
   V -> "saw" | "ate" | "walked" | "draw" | "design" | "extrude" | "open"
-  NP -> "john" | "mary" | "bob" | "filler" | Det N | Det N PP | N
+  NP -> "john" | "mary" | "bob" | "filler" | Det N | Det N PP | N | N PP | N N
   Det -> "a" | "an" | "the" | "my"
   N -> "circle" | "square" | "diameter" | "gear" | "sphere" | "radius" | "sketch" | "inches" | "inch" | "centimeters" | "centimeter" | "millimeter" | "millimeters" | "meters" | "meter" | "teeth" | "side" 
   P -> "in" | "of" | "by" | "with"
