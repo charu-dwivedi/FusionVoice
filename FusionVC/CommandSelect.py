@@ -4,7 +4,7 @@ import adsk.core, adsk.fusion, adsk.cam, traceback
 
 
 COMMAND_VERBS = {"saw":{}, "ate":{}, "walked":{}, "draw":{"circle":{"diameter":{}, "radius":fvc.draw_circle}}, "square":{"side":{}}, \
-    "design":{"gear":{}, "spring":{}}, "extrude":{"circle":{}, "square":{}, "(none)":{} }, "open":{ "sketch":{"(none)":{}} }} 
+    "design":{"gear":{}, "spring":{}}, "extrude":{"circle":{}, "square":{}, None:{} }, "open":{ "sketch":{None:fvc.open_sketch, "plane":fvc.open_sketch }}} 
 
 
 def run_command(command_arr):
@@ -24,10 +24,13 @@ def run_command(command_arr):
             if (callable(curr_dict)):
                 curr_dict(rootComp, sketches.item(numsketches-1), command_arr[x:])
             elif type(command_arr[x]) is list or type(command_arr[x]) is tuple:
-                for y in command_arr[x]: 
-                    if y in curr_dict:
-                        curr_dict = curr_dict[y]
-                        break
+                if len(command_arr[x] > 0):
+                    for y in command_arr[x]: 
+                        if y in curr_dict:
+                            curr_dict = curr_dict[y]
+                            break
+                else:
+                    curr_dict = curr_dict[None]
             else:
                 #print(type(command_arr[x]))
                 if command_arr[x] in curr_dict:

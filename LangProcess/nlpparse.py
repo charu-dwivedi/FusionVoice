@@ -15,15 +15,17 @@ UNITS_DICT = {"inches":1, "inch":1, "centimeter":1, "centimeters":1, "millimeter
 PUNCTUATION_LIST = {".":1} #to be determined
 
 COMMAND_VERBS = {"saw":1, "ate":1, "walked":1, "draw":{"circle":{"diameter":UNITS_DICT, "radius":UNITS_DICT}, "square":{"side":UNITS_DICT}}, \
-    "design":{"gear":1, "spring":1}, "extrude":{"circle":UNITS_DICT, "square":UNITS_DICT, "(none)":UNITS_DICT }, "open":{ "sketch":{"(none)":UNITS_DICT} } }
+    "design":{"gear":1, "spring":1}, "extrude":{"circle":UNITS_DICT, "square":UNITS_DICT, None:UNITS_DICT }, "open":{ "sketch":{None:UNITS_DICT} } }
 
 grammar1 = nltk.CFG.fromstring("""
   S -> NP VP | VP
   VP -> V | V NP | V NP PP | V PP NP
   PP -> P NP
-  V -> "saw" | "ate" | "walked" | "draw" | "design" | "extrude" | "open"
-  NP -> "john" | "mary" | "bob" | "filler" | Det N | Det N PP | N | N PP | N N
+  V -> "saw" | "ate" | "walked" | "draw" | "design" | "extrude" | "open" | "create"
+  NP -> "john" | "mary" | "bob" | "filler" | Det N | Det N PP | N | N PP | Det AdjP N | AdjP Ns
   Det -> "a" | "an" | "the" | "my"
+  AdjP -> Adj
+  Adj -> "new"
   N -> "circle" | "square" | "diameter" | "gear" | "sphere" | "radius" | "sketch" | "inches" | "inch" | "centimeters" | "centimeter" | "millimeter" | "millimeters" | "meters" | "meter" | "teeth" | "side" 
   P -> "in" | "of" | "by" | "with"
   """)
@@ -36,11 +38,13 @@ def remove_punctuation(sentence):
     new_sentence = [val for val in sentence if val not in PUNCTUATION_LIST]
 
 
-def is_number(num):
+def is_param_val(num):
     try:
         float(num)
         return True
     except ValueError:
+        if num == "xy" or num == "yx" or num == "yz" or num == "zy" or num == "xz" or num =="zx":
+            return True
         return False
 
 
@@ -48,7 +52,7 @@ def parse_for_number(sent):
     new_str = []
     temp_val = []
     for x in range(len(sent)):
-        if is_number(sent[x]):
+        if is_param_val(sent[x]):
             temp_val.append(float(sent[x]))
         else:
             new_str.append(sent[x])
@@ -64,6 +68,7 @@ def find_command(tree):
             if str(subtree.leaves()[0]) in COMMAND_VERBS:
                 valid_VPs.append(VP)
                 '''
+    #print(VPs)
 
     valid_VPs = [(subtree.leaves()[0], VP) for VP in VPs for subtree in list(VP.subtrees(filter=lambda x: x.label()=='V')) \
         if str(subtree.leaves()[0]) in COMMAND_VERBS]
@@ -71,6 +76,7 @@ def find_command(tree):
     if len(valid_VPs) == 0:
         return []
 
+    #print("Valid VPs:" + str(valid_VPs))
     #Find object
 
     '''
@@ -94,6 +100,7 @@ def find_command(tree):
 
     if len(valid_OBJ_NPs) == 0:
         return []
+    #print("Valid OBJ_NPs:" + str(valid_OBJ_NPs))
 
     #Find parameters
 
@@ -104,8 +111,10 @@ def find_command(tree):
         for subtree in list(OBJ_NP[2].subtrees(filter=lambda x: x.label()=='N')):
             if subtree.leaves()[0] in COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]]:
                 PARAMS_LIST.append(subtree.leaves()[0])
-        if len(PARAMS_LIST) > 0 or ("(none)" in COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]]):
+        if len(PARAMS_LIST) > 0 or (None in COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]]):
             PARAMS.append( (OBJ_NP[0], OBJ_NP[1], PARAMS_LIST, OBJ_NP[2]) )
+
+    #print("PARAMS: " + str(PARAMS))
 
     PARAMS_and_UNITS = []
 
@@ -125,8 +134,6 @@ def find_command(tree):
 #    print(PARAMS_and_UNITS)
 
     return PARAMS_and_UNITS
-
-sent = 'draw a circle with a radius of 16 inches'
 
 #sent = 'open a sketch'
 

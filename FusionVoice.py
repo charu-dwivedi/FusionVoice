@@ -8,28 +8,6 @@ import adsk.core, adsk.fusion, adsk.cam, traceback
 handlers = []
 
 def run(context):
-
-    '''
-    app = adsk.core.Application.get()
-    ui  = app.userInterface  
-    cmdDefs = ui.commandDefinitions
-    nav = ui.toolbars.itemById('NavToolbar')
-
-    buttonExample = cmdDefs.addButtonDefinition('VoiceAssistant', 'VC Button', 'VC button tooltip', \
-                                                 './/Resources//FusionVC')
-
-    buttonExampleCreated = prompt_command()
-    buttonExample.commandCreated.add(buttonExampleCreated)
-    handlers.append(buttonExampleCreated)
-
-
-    buttonControl = addInsPanel.controls.addCommand(buttonExample)
-
-    # Make the button available in the panel.
-    buttonControl.isPromotedByDefault = True
-    buttonControl.isPromoted = True
-
-    '''
     ui = None
     try:
         app = adsk.core.Application.get()
@@ -84,7 +62,7 @@ class SampleCommandExecuteHandler(adsk.core.CommandEventHandler):
         app = adsk.core.Application.get()
         ui  = app.userInterface
         prompt_command()
-        ui.messageBox('In command execute event handler.')
+        #ui.messageBox('In command execute event handler.')
 
 
 
@@ -110,10 +88,11 @@ def stop(context):
 def prompt_command():
     try:
         command = speech.speechrec() #'draw a circle with a radius of 16 inches'
-        print('draw a circle with a radius of 16 inches')
+        #print('draw a circle with a radius of 16 inches')
         command_list = nlpparse.parse_sentence(command)
         cs.run_command(command_list)
     except ValueError as e:
         print('The machine does not seem to recognize some of the words in the command, try again.')
         print(e)
+
         

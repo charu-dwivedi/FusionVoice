@@ -4,23 +4,34 @@
 import adsk.core, adsk.fusion, adsk.cam, traceback
 
 
-def open_sketch(plane, designRootComp):
+def open_sketch(designRootComp, lastsketch, command_arr):
     sketches = designRootComp.sketches
-    xyPlane = designRootComp.xYConstructionPlane
-    sketch = sketches.add(xyPlane)
+    plane = designRootComp.xYConstructionPlane
+    if len(command_arr[0] > 0):
+        if command_arr[0][0] == "yz" or command_arr[0][0] == "zy":
+            plane = designRootComp.yZConstructionPlane
+        elif command_arr[0][0] == "xz" or command_arr[0][0] == "zx":
+            plane = designRootComp.xZConstructionPlane
+    sketch = sketches.add(plane)
     
 def draw_circle(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
     circles = lastsketch.sketchCurves.sketchCircles
-    radius = float(command_arr[0][0][0])
+    if len(command_arr[0] > 0):
+        radius = float(command_arr[0][0][0])
+    else:
+        radius = 5
     circle1 = circles.addByCenterRadius(adsk.core.Point3D.create(x, y, z), radius)
 
-def extrude_object(designRootComp, lastsketch):
+def extrude_object(designRootComp, lastsketch, command_arr):
     prof = lastsketch.profiles.item(0)
     extrudes = designRootComp.features.extrudeFeatures
     extInput = extrudes.createInput(prof, adsk.fusion.FeatureOperations.NewComponentFeatureOperation)
     distance = adsk.core.ValueInput.createByReal(5)
     extInput.setDistanceExtent(False, distance)
     ext = extrudes.add(extInput)
+
+
+
 '''
 
 COMMAND_VERBS = {"saw":{}, "ate":{}, "walked":{}, "draw":{"circle":{"diameter":{}, "radius":draw_circle}}, "square":{"side":{}}, \
