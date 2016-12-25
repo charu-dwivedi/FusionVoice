@@ -19,8 +19,8 @@ def run(context):
         # Create a button command definition.
         buttonSample = cmdDefs.addButtonDefinition('FusionVC2', 
                                                    'FusionVC', 
-                                                   'Fusion Voice Control')
-                                                   #'./Resources/Sample')
+                                                   'Fusion Voice Control',
+                                                   './Resources/Microphone')
         
         # Connect to the command created event.
         sampleCommandCreated = SampleCommandCreatedEventHandler()

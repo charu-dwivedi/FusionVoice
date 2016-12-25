@@ -14,7 +14,7 @@ UNITS_DICT = {"inches":1, "inch":1, "centimeter":1, "centimeters":1, "millimeter
 
 PUNCTUATION_LIST = {".":1} #to be determined
 
-COMMAND_VERBS = {"saw":1, "ate":1, "walked":1, "draw":{"circle":{"diameter":UNITS_DICT, "radius":UNITS_DICT}, "square":{"side":UNITS_DICT}}, \
+COMMAND_VERBS = {"saw":1, "ate":1, "walked":1, "draw":{"circle":{"diameter":UNITS_DICT, "radius":UNITS_DICT}, "square":{"side":UNITS_DICT, None:UNITS_DICT}}, \
     "design":{"gear":1, "spring":1}, "extrude":{"circle":UNITS_DICT, "square":UNITS_DICT, None:UNITS_DICT }, "open":{ "sketch":{None:UNITS_DICT} } }
 
 grammar1 = nltk.CFG.fromstring("""

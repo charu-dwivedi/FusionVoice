@@ -22,11 +22,25 @@ def draw_circle(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
         radius = 5
     circle1 = circles.addByCenterRadius(adsk.core.Point3D.create(x, y, z), radius)
 
+def draw_square(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
+    sketches = designRootComp.sketches;
+    xyPlane = designRootComp.xYConstructionPlane
+    sketch = sketches.add(xyPlane)
+    if len(command_arr[0] > 0):
+        side = float(command_arr[0][0][0])
+    else:
+        side = 5
+    recLines = lines.addTwoPointRectangle(adsk.core.Point3D.create(x, y, z), adsk.core.Point3D.create(x+side, y+side, z))
+
+
 def extrude_object(designRootComp, lastsketch, command_arr):
     prof = lastsketch.profiles.item(0)
     extrudes = designRootComp.features.extrudeFeatures
     extInput = extrudes.createInput(prof, adsk.fusion.FeatureOperations.NewComponentFeatureOperation)
-    distance = adsk.core.ValueInput.createByReal(5)
+     if len(command_arr[0] > 0):
+        distance = adsk.cor.ValueInput.createByReal(float(command_arr[0][0][0]))
+    else:
+        distance = adsk.core.ValueInput.createByReal(5)
     extInput.setDistanceExtent(False, distance)
     ext = extrudes.add(extInput)
 

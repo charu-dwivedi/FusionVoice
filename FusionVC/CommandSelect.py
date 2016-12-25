@@ -3,7 +3,7 @@ from . import FusionVoiceCommands as fvc
 import adsk.core, adsk.fusion, adsk.cam, traceback
 
 
-COMMAND_VERBS = {"saw":{}, "ate":{}, "walked":{}, "draw":{"circle":{"diameter":{}, "radius":fvc.draw_circle}}, "square":{"side":{}}, \
+COMMAND_VERBS = {"saw":{}, "ate":{}, "walked":{}, "draw":{"circle":{"diameter":{}, "radius":fvc.draw_circle}}, "square":{"side":fvc.draw_square, None:fvc.draw_square}, \
     "design":{"gear":{}, "spring":{}}, "extrude":{"circle":{}, "square":{}, None:{} }, "open":{ "sketch":{None:fvc.open_sketch, "plane":fvc.open_sketch }}} 
 
 
