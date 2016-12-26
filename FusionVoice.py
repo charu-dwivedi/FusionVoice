@@ -90,9 +90,15 @@ def prompt_command():
         command = speech.speechrec() #'draw a circle with a radius of 16 inches'
         #print('draw a circle with a radius of 16 inches')
         command_list = nlpparse.parse_sentence(command)
-        cs.run_command(command_list)
-    except ValueError as e:
-        print('The machine does not seem to recognize some of the words in the command, try again.')
-        print(e)
+        if len(command_list) > 0:
+            cs.run_command(command_list)
+        else:
+            app = adsk.core.Application.get()
+            ui  = app.userInterface
+            ui.messageBox('Command not valid: ' + command)
+    except ValueError as e:  
+        app = adsk.core.Application.get()
+        ui  = app.userInterface
+        ui.messageBox('Command not valid: ' + command)
 
         
