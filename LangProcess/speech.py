@@ -7,9 +7,6 @@ import pyglet
 import pyaudio
 import wave
 
-# Open a plain text file for reading.  For this example, assume that
-# the text file contains only ASCII characters.
-
 def speech_play_test(voice_output):
      audio_file = "/Users/charu/Projects/FusionVoice/LangProcess/test.mp3"
      tts = gTTS(text=voice_output, lang="en")
