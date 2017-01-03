@@ -15,7 +15,7 @@ UNITS_DICT = {"inches":1, "inch":1, "centimeter":1, "centimeters":1, "millimeter
 PUNCTUATION_LIST = {".":1} #to be determined
 
 COMMAND_VERBS = {"saw":1, "ate":1, "walked":1, "draw":{"circle":{"diameter":UNITS_DICT, "radius":UNITS_DICT}, "square":{"side":UNITS_DICT, None:UNITS_DICT}}, \
-    "design":{"gear":1, "spring":1}, "extrude":{"circle":UNITS_DICT, "square":UNITS_DICT, None:UNITS_DICT }, "open":{ "sketch":{None:UNITS_DICT} } }
+    "design":{"gear":1, "spring":1}, "extrude":{"circle":UNITS_DICT, "square":UNITS_DICT, None:UNITS_DICT }, "open":{ "sketch":{None:[], "plane":[]} } }
 
 grammar1 = nltk.CFG.fromstring("""
   S -> NP VP | VP
@@ -26,8 +26,8 @@ grammar1 = nltk.CFG.fromstring("""
   Det -> "a" | "an" | "the" | "my"
   AdjP -> Adj
   Adj -> "new"
-  N -> "circle" | "square" | "diameter" | "gear" | "sphere" | "radius" | "sketch" | "inches" | "inch" | "centimeters" | "centimeter" | "millimeter" | "millimeters" | "meters" | "meter" | "teeth" | "side" 
-  P -> "in" | "of" | "by" | "with"
+  N -> "circle" | "square" | "diameter" | "gear" | "sphere" | "radius" | "sketch" | "inches" | "inch" | "centimeters" | "centimeter" | "millimeter" | "millimeters" | "meters" | "meter" | "teeth" | "side" | "plane"
+  P -> "in" | "of" | "by" | "with" | "on"
   """)
 
 
@@ -47,19 +47,28 @@ def is_param_val(num):
             return True
         return False
 
+def is_float(num):
+    try:
+        float(num)
+        return True
+    except ValueError:
+        return False
 
 def parse_for_number(sent):
     new_str = []
     temp_val = []
     for x in range(len(sent)):
         if is_param_val(sent[x]):
-            temp_val.append(float(sent[x]))
+            if is_float(sent[x]):
+                temp_val.append(float(sent[x]))
+            else:
+                temp_val.append(sent[x])
         else:
             new_str.append(sent[x])
     return new_str, temp_val
 
 
-def find_command(tree):
+def find_command(tree,  sentence, numlist):
     #Find verb
     VPs = list(tree.subtrees(filter=lambda x: x.label()=='VP'))
     '''
@@ -114,8 +123,20 @@ def find_command(tree):
         if len(PARAMS_LIST) > 0 or (None in COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]]):
             PARAMS.append( (OBJ_NP[0], OBJ_NP[1], PARAMS_LIST, OBJ_NP[2]) )
 
-    #print("PARAMS: " + str(PARAMS))
+    #possibly missed the prepositional phrase because of the way nlp parsed it
 
+    for PARAM in PARAMS:
+        if len(PARAM[2]) == 0:
+           # print("ran")
+            for key in COMMAND_VERBS[PARAM[0]][PARAM[1]]:
+                print(key)
+                print(sentence)
+                if key in sentence:
+                    #print("truu")
+                    PARAM[2].append(key)
+
+
+    #print("PARAMS: " + str(PARAMS))
     PARAMS_and_UNITS = []
 
     for OBJ_NP in PARAMS:
@@ -128,8 +149,12 @@ def find_command(tree):
             if subtree.leaves()[0] in COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]][OBJ_NP[2][param_ind]]:
                 UNITS_LIST.append(subtree.leaves()[0])
                 param_ind += 1
-        if len(UNITS_LIST) == len(OBJ_NP[2]):
-            PARAMS_and_UNITS.append( (OBJ_NP[0], OBJ_NP[1], OBJ_NP[2], UNITS_LIST) )
+        if COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]][OBJ_NP[2][0]] == UNITS_DICT:
+            if len(UNITS_LIST) == len(OBJ_NP[2]):
+                PARAMS_and_UNITS.append( (OBJ_NP[0], OBJ_NP[1], OBJ_NP[2], UNITS_LIST) )
+        else:
+            PARAMS_and_UNITS.append( (OBJ_NP[0], OBJ_NP[1], OBJ_NP[2], numlist) )
+
 
 #    print(PARAMS_and_UNITS)
 
@@ -147,7 +172,10 @@ def parse_sentence(sentence):
     parsed = sr_parser.parse(sent)
     #print(sent)
     command_dict = {}
-    possible_commands = [find_command(tree) for tree in sr_parser.parse(sent)]
+    for tree in sr_parser.parse(sent):
+        print(tree)
+    possible_commands = [find_command(tree, sent, numlist) for tree in sr_parser.parse(sent)]
+    print(possible_commands)
     possible_commands = [subcommand for command in possible_commands for subcommand in command if len(command) > 0]
     possible_commands = [command for command in possible_commands if len(command[3]) == len(numlist)]
     possible_commands = [(command[0], command[1], command[2], list(zip(numlist, command[3]))) for command in possible_commands]

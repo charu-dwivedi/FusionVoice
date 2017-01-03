@@ -14,7 +14,7 @@ def open_sketch(designRootComp, lastsketch, command_arr):
             plane = designRootComp.xZConstructionPlane
     sketch = sketches.add(plane)
     
-def draw_circle(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
+def draw_circle(designRootComp, lastsketch, command_arr, x=0, ydd=0, z=0):
     circles = lastsketch.sketchCurves.sketchCircles
     if len(command_arr[0] > 0):
         radius = float(command_arr[0][0][0])
