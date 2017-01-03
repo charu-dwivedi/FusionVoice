@@ -37,7 +37,7 @@ def extrude_object(designRootComp, lastsketch, command_arr):
     prof = lastsketch.profiles.item(0)
     extrudes = designRootComp.features.extrudeFeatures
     extInput = extrudes.createInput(prof, adsk.fusion.FeatureOperations.NewComponentFeatureOperation)
-     if len(command_arr[0] > 0):
+    if len(command_arr[0] > 0):
         distance = adsk.cor.ValueInput.createByReal(float(command_arr[0][0][0]))
     else:
         distance = adsk.core.ValueInput.createByReal(5)

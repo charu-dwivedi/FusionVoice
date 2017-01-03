@@ -69,6 +69,7 @@ def parse_for_number(sent):
 
 
 def find_command(tree,  sentence, numlist):
+    print("finding command...")
     #Find verb
     VPs = list(tree.subtrees(filter=lambda x: x.label()=='VP'))
     '''

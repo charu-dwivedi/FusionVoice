@@ -31,12 +31,14 @@ def audio_file_remove():
 
 def speechrec():
     playWav('/Users/charu/Projects/FusionVoice/LangProcess/ask.wav')
+    print("Now!")
     r = sr.Recognizer()
     with sr.Microphone() as source:                # use the default microphone as the audio source
         audio = r.listen(source)                   # listen for the first phrase and extract it into audio data
     try:
-        #print("you here?")
+        print("you here?")
         banana = r.recognize_google(audio, language = "en-us", show_all=False)   # recognize speech using Google Speech Recognition
+        #print(banana)
         playWav('/Users/charu/Projects/FusionVoice/LangProcess/understood.wav')
         return banana
     except:                            # speech is unintelligible
@@ -55,7 +57,7 @@ def playWav(wavename):
     data = f.readframes(chunk)  
 
     #paly stream  
-    while data != '':  
+    while len(data) > 0: #while data != '':  <--- enters infinite loop
         stream.write(data)  
         data = f.readframes(chunk)  
 

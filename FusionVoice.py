@@ -88,6 +88,7 @@ def stop(context):
 def prompt_command():
     try:
         command = speech.speechrec() #'draw a circle with a radius of 16 inches'
+        print(command)
         #print('draw a circle with a radius of 16 inches')
         command_list = nlpparse.parse_sentence(command)
         if len(command_list) > 0:

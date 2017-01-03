@@ -15,7 +15,7 @@ def run_command(command_arr):
         design = adsk.fusion.Design.cast(product)
         plane = "xy"
         rootComp = design.rootComponent
-        fvc.open_sketch(plane, rootComp)
+        fvc.open_sketch(plane, rootComp, [[plane]])
         sketches = rootComp.sketches
         numsketches = sketches.count
         curr_dict = COMMAND_VERBS
