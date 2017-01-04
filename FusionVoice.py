@@ -28,7 +28,7 @@ def run(context):
         handlers.append(sampleCommandCreated)
         
         # Get the ADD-INS panel in the model workspace. 
-        addInsPanel = ui.allToolbarPanels.itemById('SolidScriptsAddinsPanel')
+        addInsPanel = ui.toolbars.itemById('NavToolbar')
         
         # Add the button to the bottom of the panel.
         buttonControl = addInsPanel.controls.addCommand(buttonSample)
@@ -76,7 +76,7 @@ def stop(context):
         if cmdDef:
             cmdDef.deleteMe()
             
-        addinsPanel = ui.allToolbarPanels.itemById('SolidScriptsAddinsPanel')
+        addinsPanel = ui.toolbars.itemById('NavToolbar')
         cntrl = addinsPanel.controls.itemById('FusionVC2')
         if cntrl:
             cntrl.deleteMe()
