@@ -72,12 +72,12 @@ def stop(context):
         ui  = app.userInterface
         
         # Clean up the UI.
-        cmdDef = ui.commandDefinitions.itemById('MyButtonDefIdPython')
+        cmdDef = ui.commandDefinitions.itemById('FusionVC2')
         if cmdDef:
             cmdDef.deleteMe()
             
         addinsPanel = ui.allToolbarPanels.itemById('SolidScriptsAddinsPanel')
-        cntrl = addinsPanel.controls.itemById('MyButtonDefIdPython')
+        cntrl = addinsPanel.controls.itemById('FusionVC2')
         if cntrl:
             cntrl.deleteMe()
     except:

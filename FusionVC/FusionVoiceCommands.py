@@ -4,19 +4,19 @@
 import adsk.core, adsk.fusion, adsk.cam, traceback
 
 
-def open_sketch(designRootComp, lastsketch, command_arr):
+def open_sketch(designRootComp, command_arr):
     sketches = designRootComp.sketches
     plane = designRootComp.xYConstructionPlane
-    if len(command_arr[0] > 0):
+    if len(command_arr[0]) > 0:
         if command_arr[0][0] == "yz" or command_arr[0][0] == "zy":
             plane = designRootComp.yZConstructionPlane
         elif command_arr[0][0] == "xz" or command_arr[0][0] == "zx":
             plane = designRootComp.xZConstructionPlane
     sketch = sketches.add(plane)
     
-def draw_circle(designRootComp, lastsketch, command_arr, x=0, ydd=0, z=0):
+def draw_circle(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
     circles = lastsketch.sketchCurves.sketchCircles
-    if len(command_arr[0] > 0):
+    if len(command_arr[0]) > 0:
         radius = float(command_arr[0][0][0])
     else:
         radius = 5
@@ -26,7 +26,7 @@ def draw_square(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
     sketches = designRootComp.sketches;
     xyPlane = designRootComp.xYConstructionPlane
     sketch = sketches.add(xyPlane)
-    if len(command_arr[0] > 0):
+    if len(command_arr[0]) > 0:
         side = float(command_arr[0][0][0])
     else:
         side = 5
@@ -37,7 +37,7 @@ def extrude_object(designRootComp, lastsketch, command_arr):
     prof = lastsketch.profiles.item(0)
     extrudes = designRootComp.features.extrudeFeatures
     extInput = extrudes.createInput(prof, adsk.fusion.FeatureOperations.NewComponentFeatureOperation)
-    if len(command_arr[0] > 0):
+    if len(command_arr[0]) > 0:
         distance = adsk.cor.ValueInput.createByReal(float(command_arr[0][0][0]))
     else:
         distance = adsk.core.ValueInput.createByReal(5)

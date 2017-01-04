@@ -15,7 +15,7 @@ def run_command(command_arr):
         design = adsk.fusion.Design.cast(product)
         plane = "xy"
         rootComp = design.rootComponent
-        fvc.open_sketch(plane, rootComp, [[plane]])
+        fvc.open_sketch(rootComp, [[plane]])
         sketches = rootComp.sketches
         numsketches = sketches.count
         curr_dict = COMMAND_VERBS
@@ -24,7 +24,7 @@ def run_command(command_arr):
             if (callable(curr_dict)):
                 curr_dict(rootComp, sketches.item(numsketches-1), command_arr[x:])
             elif type(command_arr[x]) is list or type(command_arr[x]) is tuple:
-                if len(command_arr[x] > 0):
+                if len(command_arr[x]) > 0:
                     for y in command_arr[x]: 
                         if y in curr_dict:
                             curr_dict = curr_dict[y]
