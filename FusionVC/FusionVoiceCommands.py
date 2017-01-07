@@ -4,7 +4,7 @@
 import adsk.core, adsk.fusion, adsk.cam, traceback
 
 
-def open_sketch(designRootComp, command_arr):
+def open_sketch(designRootComp, lastsketch, command_arr):
     sketches = designRootComp.sketches
     plane = designRootComp.xYConstructionPlane
     if len(command_arr[0]) > 0:
@@ -13,8 +13,11 @@ def open_sketch(designRootComp, command_arr):
         elif command_arr[0][0] == "xz" or command_arr[0][0] == "zx":
             plane = designRootComp.xZConstructionPlane
     sketch = sketches.add(plane)
+    return sketch
     
 def draw_circle(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
+    if lastsketch is None:
+        lastsketch = open_sketch(designRootComp, None, [["xy"]])
     circles = lastsketch.sketchCurves.sketchCircles
     if len(command_arr[0]) > 0:
         radius = float(command_arr[0][0][0])
@@ -23,6 +26,8 @@ def draw_circle(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
     circle1 = circles.addByCenterRadius(adsk.core.Point3D.create(x, y, z), radius)
 
 def draw_square(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
+    if lastsketch is None:
+        lastsketch = open_sketch(designRootComp, None, [["xy"]])
     sketches = designRootComp.sketches;
     xyPlane = designRootComp.xYConstructionPlane
     sketch = sketches.add(xyPlane)
@@ -34,6 +39,8 @@ def draw_square(designRootComp, lastsketch, command_arr, x=0, y=0, z=0):
 
 
 def extrude_object(designRootComp, lastsketch, command_arr):
+    if lastsketch is None:
+        return
     prof = lastsketch.profiles.item(0)
     extrudes = designRootComp.features.extrudeFeatures
     extInput = extrudes.createInput(prof, adsk.fusion.FeatureOperations.NewComponentFeatureOperation)

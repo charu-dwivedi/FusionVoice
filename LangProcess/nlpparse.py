@@ -15,7 +15,8 @@ UNITS_DICT = {"inches":1, "inch":1, "centimeter":1, "centimeters":1, "millimeter
 PUNCTUATION_LIST = {".":1} #to be determined
 
 COMMAND_VERBS = {"saw":1, "ate":1, "walked":1, "draw":{"circle":{"diameter":UNITS_DICT, "radius":UNITS_DICT}, "square":{"side":UNITS_DICT, None:UNITS_DICT}}, \
-    "design":{"gear":1, "spring":1}, "extrude":{"circle":UNITS_DICT, "square":UNITS_DICT, None:UNITS_DICT }, "open":{ "sketch":{None:[], "plane":[]} } }
+    "design":{"gear":1, "spring":1}, "extrude":{"circle":{None:UNITS_DICT}, "square":{None:UNITS_DICT}, "sketch":{None:UNITS_DICT}, None:{None:UNITS_DICT}, "inches":{None:UNITS_DICT}, "inch":{None:UNITS_DICT}, "centimeter":{None:UNITS_DICT}, "centimeters":{None:UNITS_DICT}, "millimeter":{None:UNITS_DICT}, "millimeters":{None:UNITS_DICT},\
+    "meters":{None:UNITS_DICT}, "meters":{None:UNITS_DICT}}, "open":{ "sketch":{None:[], "plane":[]} } }
 
 grammar1 = nltk.CFG.fromstring("""
   S -> NP VP | VP
@@ -86,7 +87,7 @@ def find_command(tree,  sentence, numlist):
     if len(valid_VPs) == 0:
         return []
 
-    #print("Valid VPs:" + str(valid_VPs))
+    print("Valid VPs:" + str(valid_VPs))
     #Find object
 
     '''
@@ -110,7 +111,7 @@ def find_command(tree,  sentence, numlist):
 
     if len(valid_OBJ_NPs) == 0:
         return []
-    #print("Valid OBJ_NPs:" + str(valid_OBJ_NPs))
+    print("Valid OBJ_NPs:" + str(valid_OBJ_NPs))
 
     #Find parameters
 
@@ -137,7 +138,7 @@ def find_command(tree,  sentence, numlist):
                     PARAM[2].append(key)
 
 
-    #print("PARAMS: " + str(PARAMS))
+    print("PARAMS: " + str(PARAMS))
     PARAMS_and_UNITS = []
 
     for OBJ_NP in PARAMS:
@@ -150,7 +151,8 @@ def find_command(tree,  sentence, numlist):
             if subtree.leaves()[0] in COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]][OBJ_NP[2][param_ind]]:
                 UNITS_LIST.append(subtree.leaves()[0])
                 param_ind += 1
-        if COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]][OBJ_NP[2][0]] == UNITS_DICT:
+        print(OBJ_NP)
+        if len(OBJ_NP[2]) > 0 and COMMAND_VERBS[OBJ_NP[0]][OBJ_NP[1]][OBJ_NP[2][0]] == UNITS_DICT:
             if len(UNITS_LIST) == len(OBJ_NP[2]):
                 PARAMS_and_UNITS.append( (OBJ_NP[0], OBJ_NP[1], OBJ_NP[2], UNITS_LIST) )
         else:

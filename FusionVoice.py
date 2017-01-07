@@ -1,4 +1,8 @@
 import sys
+import os
+install_path = os.getcwd()
+install_path += '/packages/'
+sys.path.append(install_path)
 sys.path.append("/usr/local/lib/python3.5/site-packages/")
 from .LangProcess import nlpparse
 from .LangProcess import speech
@@ -23,7 +27,7 @@ def run(context):
                                                    './Resources/Microphone')
         
         # Connect to the command created event.
-        sampleCommandCreated = SampleCommandCreatedEventHandler()
+        sampleCommandCreated = MicCommandCreatedEventHandler()
         buttonSample.commandCreated.add(sampleCommandCreated)
         handlers.append(sampleCommandCreated)
         
@@ -38,7 +42,7 @@ def run(context):
 
 
 # Event handler for the commandCreated event.
-class SampleCommandCreatedEventHandler(adsk.core.CommandCreatedEventHandler):
+class MicCommandCreatedEventHandler(adsk.core.CommandCreatedEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
@@ -46,13 +50,13 @@ class SampleCommandCreatedEventHandler(adsk.core.CommandCreatedEventHandler):
         cmd = eventArgs.command
 
         # Connect to the execute event.
-        onExecute = SampleCommandExecuteHandler()
+        onExecute = MicCommandExecuteHandler()
         cmd.execute.add(onExecute)
         handlers.append(onExecute)
 
 
 # Event handler for the execute event.
-class SampleCommandExecuteHandler(adsk.core.CommandEventHandler):
+class MicCommandExecuteHandler(adsk.core.CommandEventHandler):
     def __init__(self):
         super().__init__()
     def notify(self, args):
@@ -100,6 +104,7 @@ def prompt_command():
     except ValueError as e:  
         app = adsk.core.Application.get()
         ui  = app.userInterface
+        speech.playWav('/Users/charu/Projects/FusionVoice/LangProcess/failure_new.wav')
         ui.messageBox('Command not valid: ' + command)
 
         
