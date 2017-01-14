@@ -4,8 +4,8 @@ import adsk.core, adsk.fusion, adsk.cam, traceback
 
 
 COMMAND_VERBS = {"saw":{}, "ate":{}, "walked":{}, "draw":{"circle":{"diameter":{}, "radius":fvc.draw_circle}}, "square":{"side":fvc.draw_square, None:fvc.draw_square}, \
-    "design":{"gear":{}, "spring":{}}, "extrude":{"circle":fvc.extrude_object, "square":fvc.extrude_object, None:fvc.extrude_object, "sketch":fvc.extrude_object, "inches":fvc.extrude_object, "inch":fvc.extrude_object, "centimeter":fvc.extrude_object, "centimeters":fvc.extrude_object}, "millimeter":fvc.extrude_object, "millimeters":fvc.extrude_object,\
-    "meters":fvc.extrude_object, "meters":fvc.extrude_object}, "open":{ "sketch":{None:fvc.open_sketch, "plane":fvc.open_sketch }}} 
+    "design":{"gear":{}, "spring":{}}, "extrude":{"circle":fvc.extrude_object, "square":fvc.extrude_object, None:fvc.extrude_object, "sketch":fvc.extrude_object, "inches":fvc.extrude_object, "inch":fvc.extrude_object, "centimeter":fvc.extrude_object, "centimeters":fvc.extrude_object, "millimeter":fvc.extrude_object, "millimeters":fvc.extrude_object,\
+    "meter":fvc.extrude_object, "meters":fvc.extrude_object}, "open":{ "sketch":{None:fvc.open_sketch, "plane":fvc.open_sketch }}} 
 
 
 def run_command(command_arr):
