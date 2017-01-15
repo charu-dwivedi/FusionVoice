@@ -35,11 +35,10 @@ def speechrec():
     with sr.Microphone() as source:                # use the default microphone as the audio source
         audio = r.listen(source)                   # listen for the first phrase and extract it into audio data
     try:
-        print("you here?")
-        banana = r.recognize_google(audio, language = "en-us", show_all=False)   # recognize speech using Google Speech Recognition
+        rec_output = r.recognize_google(audio, language = "en-us", show_all=False)   # recognize speech using Google Speech Recognition
         #print(banana)
         playWav('/Users/charu/Projects/FusionVoice/LangProcess/understood_new.wav')
-        return banana
+        return rec_output
     except:                            # speech is unintelligible
         errormess = "Could not understand audio, please try again"
         playWav('/Users/charu/Projects/FusionVoice/LangProcess/failure_new.wav')
